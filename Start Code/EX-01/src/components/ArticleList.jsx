@@ -1,19 +1,31 @@
 import { useEffect, useState } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
+import axios from 'axios';
 
 export default function ArticleList() {
   const [articles, setArticles] = useState([]);
   // Fetch all articles when component mounts
+  const navigagte = useNavigate();
   useEffect(() => {
     fetchArticles();
   }, []);
 
   const fetchArticles = async () => {
     // Fetch articles from the API
+    try { const response = await axios.get ('http://localhost:3000/api/articles');
+      setArticles(response.data);
+    } catch (error) {
+      console.error('Error fetching articles:', error);
+    }
   };
 
   const deleteArticle = async (id) => {
     // Delete an article by ID
+    try {      await axios.delete(`http://localhost:3000/api/articles/${id}`);
+      fetchArticles(); // Refresh the list after deletion
+    } catch (error) {
+      console.error('Error deleting article:', error);
+    }
   };
 
   return (

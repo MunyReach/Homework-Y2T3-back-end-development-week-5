@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
+import axios from 'axios';
 
 export default function ArticleForm() {
   const [form, setForm] = useState({
@@ -16,6 +17,11 @@ export default function ArticleForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Validate form data
+    try { await axios.post('http://localhost:3000/api/articles', form); 
+      navigate('/'); // Redirect to article list after successful submission
+    } catch (error) {
+      console.error('Error adding article:', error);
+    }
   };
 
   return (

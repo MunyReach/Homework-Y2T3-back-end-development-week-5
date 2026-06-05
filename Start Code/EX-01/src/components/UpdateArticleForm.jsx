@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 export default function UpdateArticleForm() {
   const [form, setForm] = useState({
@@ -11,8 +12,16 @@ export default function UpdateArticleForm() {
 
   // Fetch to prefill a form and update an existing article
   useEffect(() => {
+    const fetchArticle = async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/api/articles/${id}`);
+        setForm(response.data);
+      } catch (error) {
+        console.error('Error fetching article:', error);
+      }
+    }; fetchArticle();
 
-  }, []);
+  }, [id]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -21,6 +30,11 @@ export default function UpdateArticleForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Update article with axios
+    try { await axios.put(`http://localhost:3000/api/articles/${id}`, form);
+      navigate('/'); // Redirect to article list after successful update
+    } catch (error) {
+      console.error('Error updating article:', error);
+    }   
   };
 
   return (

@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 export default function ArticleFilter() {
   const [articles, setArticles] = useState([]);
   // Fetch all articles when component mounts
+  const [journalists, setJournalists] = useState([]);
+  const [categories, setCategories] = useState([]); 
+  const [selectedJournalist, setSelectedJournalist] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
   useEffect(() => {
     fetchArticles();
     fetchJournalists();
@@ -11,14 +16,30 @@ export default function ArticleFilter() {
 
   const fetchArticles = async () => {
     // Fetch articles from the API
+    try { const response = await axios.get ('http://localhost:3000/api/articles');
+      setArticles(response.data);
+    } catch (error) {
+      console.error('Error fetching articles:', error);
+    }
+
   };
 
   const fetchJournalists = async () => {
     // Fetch journalists from the API
+    try { const response = await axios.get ('http://localhost:3000/api/journalists');
+      setJournalists(response.data);
+    } catch (error) {
+      console.error('Error fetching journalists:', error);
+    }
   };
 
   const fetchCategories = async () => {
     // Fetch categories from the API
+    try { const response = await axios.get ('http://localhost:3000/api/categories');
+      setCategories(response.data);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }   
   }
 
   return (

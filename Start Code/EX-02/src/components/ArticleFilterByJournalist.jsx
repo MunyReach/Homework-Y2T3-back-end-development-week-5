@@ -1,18 +1,37 @@
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 export default function ArticleFilterByJournalist() {
   const [articles, setArticles] = useState([]);
   // Fetch all articles when component mounts
+  const [journalists, setJournalists] = useState([]); 
+  const [selectedJournalist, setSelectedJournalist] = useState('');
   useEffect(() => {
     fetchArticles();
+    fetchJournalists();
   }, []);
 
   const fetchArticles = async () => {
-    // Fetch articles from the API
+    // Fetch articles from the API\
+    try {const response = await axios.get ('http://localhost:3000/api/articles');
+      setArticles(response.data);
+    } catch (error) {
+      console.error('Error fetching articles:', error);
+    }
+    
   };
 
   const fetchJournalists = async () => {
     // Fetch journalists from the API
+    try { const response = await axios.get ('http://localhost:3000/api/journalists');
+      setJournalists(response.data);
+    } catch (error) {
+      console.error('Error fetching journalists:', error);
+    }
+  };
+  const resetFilters = () => {  
+    setSelectedJournalist('');
+    fetchArticles(); // Refetch all articles to reset filters
   };
 
   return (
